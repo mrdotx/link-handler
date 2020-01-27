@@ -3,7 +3,7 @@
 # path:       ~/projects/newsboat/link_handler.sh
 # user:       klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-01-23T19:53:44+0100
+# date:       2020-01-27T11:56:48+0100
 
 movies="mpv --quiet"
 podcasts="$TERMINAL -e mpv --no-audio-display"
@@ -19,11 +19,11 @@ pictures="sxiv -a -s f"
 case "$1" in
 *mkv | *webm | *mp4 | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
     notify-send -i "$HOME/projects/shell/icons/rss.png" "Newsboat" "Open URL in multimedia player:\n$1" \
-        && eval tsp "$movies --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 > /dev/null 2>&1" &
+        && eval tsp "$movies --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 >/dev/null 2>&1" &
     ;;
 *mp3 | *flac | *opus)
     notify-send -i "$HOME/projects/shell/icons/rss.png" "Newsboat" "Open URL in multimedia player:\n$1" \
-        && eval tsp "$podcasts --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 > /dev/null 2>&1" &
+        && eval tsp "$podcasts --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 >/dev/null 2>&1" &
     ;;
 *png | *jpg | *jpe | *jpeg | *gif)
     notify-send -i "$HOME/projects/shell/icons/rss.png" "Newsboat" "Open URL in picture viewer:\n$1" \
@@ -36,7 +36,7 @@ case "$1" in
             && eval "$TERMINAL -e $EDITOR $1" &
     else
         notify-send -i "$HOME/projects/shell/icons/rss.png" "Newsboat" "Open URL in browser:\n$1" \
-            && eval "$BROWSER $1 > /dev/null 2>&1" &
+            && eval "$BROWSER $1 >/dev/null 2>&1" &
     fi
     ;;
 esac
