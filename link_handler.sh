@@ -3,9 +3,9 @@
 # path:       ~/projects/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-03T13:20:03+0100
+# date:       2020-02-07T14:10:25+0100
 
-movies="mpv --quiet"
+movies="mpv --really-quiet"
 podcasts="$TERMINAL -e mpv --no-audio-display"
 pictures="sxiv -a -s f"
 
