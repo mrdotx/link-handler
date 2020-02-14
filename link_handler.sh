@@ -3,13 +3,13 @@
 # path:       ~/projects/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-14T11:52:02+0100
+# date:       2020-02-14T11:59:27+0100
 
-web="i3_tiling.sh $BROWSER"
-edit="i3_tiling.sh $TERMINAL -e $EDITOR"
-podcast="i3_tiling.sh $TERMINAL -e mpv --no-audio-display"
-video="i3_tiling.sh mpv --really-quiet"
-picture="i3_tiling.sh sxiv -a -s f"
+web="$BROWSER"
+edit="$TERMINAL -e $EDITOR"
+podcast="$TERMINAL -e mpv --no-audio-display"
+video="mpv --really-quiet"
+picture="sxiv -a -s f"
 
 # if no url given open browser
 [ -z "$1" ] && {
