@@ -3,7 +3,7 @@
 # path:       ~/projects/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-20T20:52:46+0100
+# date:       2020-02-23T21:47:00+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -29,8 +29,8 @@ case "$1" in
     ;;
     *jpg | *jpe | *jpeg | *png | *gif | *webp)
         notify-send "link handler" "open url in picture viewer:\n$1" \
-            && curl -sL "$1" >"/tmp/$(echo "$1" | sed "s/.*\///")" \
-            && eval "$picture /tmp/$(echo "$1" | sed "s/.*\///") >/dev/null 2>&1" &
+            && curl -sL "$1" >"/tmp/$(printf "%s" "$1" | sed "s/.*\///")" \
+            && eval "$picture /tmp/$(printf "%s" "$1" | sed "s/.*\///") >/dev/null 2>&1" &
     ;;
     *)
         if [ -f "$1" ]; then
