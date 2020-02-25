@@ -3,12 +3,12 @@
 # path:       ~/projects/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-23T21:47:00+0100
+# date:       2020-02-25T11:54:24+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
-podcast="$TERMINAL -e mpv --no-audio-display"
-video="mpv --really-quiet"
+podcast="$TERMINAL -e mpv --no-audio-display --input-ipc-server=/tmp/mpvsoc$(date +%s)"
+video="mpv --really-quiet --input-ipc-server=/tmp/mpvsoc$(date +%s)"
 picture="sxiv -a -s f"
 
 # if no url given open browser
@@ -21,11 +21,11 @@ picture="sxiv -a -s f"
 case "$1" in
     *mkv | *mp4 | *webm | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
         notify-send "link handler" "open url in video player:\n$1" \
-            && eval tsp "$video --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 >/dev/null 2>&1" &
+            && eval tsp "$video $1 >/dev/null 2>&1" &
     ;;
     *mp3 | *flac | *opus)
         notify-send "link handler" "open url in audio player:\n$1" \
-            && eval tsp "$podcast --input-ipc-server=/tmp/mpvsoc$(date +%s) $1 >/dev/null 2>&1" &
+            && eval tsp "$podcast $1 >/dev/null 2>&1" &
     ;;
     *jpg | *jpe | *jpeg | *png | *gif | *webp)
         notify-send "link handler" "open url in picture viewer:\n$1" \
