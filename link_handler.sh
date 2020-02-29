@@ -3,7 +3,7 @@
 # path:       ~/repos/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-29T13:48:16+0100
+# date:       2020-02-29T22:25:04+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -14,8 +14,7 @@ document="zathura"
 
 # if no file/url given open browser
 [ -z "$1" ] && {
-    notify-send "link handler" "no url/file given, open browser..." \
-        && eval "$web" &
+    notify-send "link handler" "no url/file given, exit..."
     exit
 }
 
