@@ -3,12 +3,12 @@
 # path:       ~/repos/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-02-29T22:25:04+0100
+# date:       2020-03-01T23:18:27+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
-podcast="$TERMINAL -e mpv --no-audio-display --input-ipc-server=/tmp/mpvsoc$(date +%s)"
-video="mpv --really-quiet --input-ipc-server=/tmp/mpvsoc$(date +%s)"
+podcast="$TERMINAL -e mpv --no-audio-display"
+video="mpv --really-quiet"
 picture="sxiv -a -s f"
 document="zathura"
 
