@@ -3,14 +3,14 @@
 # path:       ~/repos/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-03-01T23:18:27+0100
+# date:       2020-03-06T19:32:36+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
 podcast="$TERMINAL -e mpv --no-audio-display"
 video="mpv --really-quiet"
 picture="sxiv -a -s f"
-document="zathura"
+document="$READER"
 
 # if no file/url given open browser
 [ -z "$1" ] && {
@@ -33,7 +33,7 @@ case "$1" in
             && eval "$picture /tmp/$(printf "%s" "$1" | sed "s/.*\///") >/dev/null 2>&1" &
     ;;
     *pdf | *ps | *djvu | *epub | *cbr | *cbz)
-        notify-send "link handler" "open url in document viewer:\n$1" \
+        notify-send "link handler" "open url in document reader:\n$1" \
             && curl -sL "$1" >"/tmp/$(printf "%s" "$1" | sed "s/.*\///")" \
             && eval "$document /tmp/$(printf "%s" "$1" | sed "s/.*\///") >/dev/null 2>&1" &
     ;;    *)
