@@ -3,7 +3,7 @@
 # path:       ~/repos/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-03-06T19:32:36+0100
+# date:       2020-03-12T10:19:58+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -12,37 +12,49 @@ video="mpv --really-quiet"
 picture="sxiv -a -s f"
 document="$READER"
 
-# if no file/url given open browser
-[ -z "$1" ] && {
+data="$1"
+
+# if no url/file given exit the application
+[ -z "$data" ] && {
     notify-send "link handler" "no url/file given, exit..."
     exit
 }
 
-case "$1" in
+# open in application and if given, open with tsp (taskspooler)
+open() {
+    eval "$2" "$1 $data >/dev/null 2>&1" &
+}
+
+# download files to tmp directory before open it
+open_tmp() {
+    curl -sL "$data" >"/tmp/$(printf "%s" "$data" | sed "s/.*\///")" \
+    && eval "$1 /tmp/$(printf "%s" "$data" | sed "s/.*\///") >/dev/null 2>&1" &
+}
+
+case "$data" in
     *mkv | *mp4 | *webm | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
-        notify-send "link handler" "open url in video player:\n$1" \
-            && eval tsp "$video $1 >/dev/null 2>&1" &
+        notify-send "link handler" "open url in video player:\n$data" \
+            && open "$video" "tsp"
     ;;
     *mp3 | *flac | *opus)
-        notify-send "link handler" "open url in audio player:\n$1" \
-            && eval tsp "$podcast $1 >/dev/null 2>&1" &
+        notify-send "link handler" "open url in audio player:\n$data" \
+            && open "$podcast" "tsp"
     ;;
     *jpg | *jpe | *jpeg | *png | *gif | *webp)
-        notify-send "link handler" "open url in picture viewer:\n$1" \
-            && curl -sL "$1" >"/tmp/$(printf "%s" "$1" | sed "s/.*\///")" \
-            && eval "$picture /tmp/$(printf "%s" "$1" | sed "s/.*\///") >/dev/null 2>&1" &
+        notify-send "link handler" "open url in picture viewer:\n$data" \
+            && open_tmp "$picture"
     ;;
     *pdf | *ps | *djvu | *epub | *cbr | *cbz)
-        notify-send "link handler" "open url in document reader:\n$1" \
-            && curl -sL "$1" >"/tmp/$(printf "%s" "$1" | sed "s/.*\///")" \
-            && eval "$document /tmp/$(printf "%s" "$1" | sed "s/.*\///") >/dev/null 2>&1" &
-    ;;    *)
-        if [ -f "$1" ]; then
-            notify-send "link handler" "open url in editor:\n$1" \
-                && eval "$edit $1 >/dev/null 2>&1" &
+        notify-send "link handler" "open url in document reader:\n$data" \
+            && open_tmp "$document"
+    ;;
+    *)
+        if [ -f "$data" ]; then
+            notify-send "link handler" "open url in editor:\n$data" \
+                && open "$edit"
         else
-            notify-send "link handler" "open url in browser:\n$1" \
-                && eval "$web $1 >/dev/null 2>&1" &
+            notify-send "link handler" "open url in browser:\n$data" \
+                && open "$web"
         fi
     ;;
 esac
