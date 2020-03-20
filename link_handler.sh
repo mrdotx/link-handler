@@ -3,7 +3,7 @@
 # path:       ~/repos/newsboat/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-03-12T10:19:58+0100
+# date:       2020-03-20T10:24:13+0100
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -11,6 +11,7 @@ podcast="$TERMINAL -e mpv --no-audio-display"
 video="mpv --really-quiet"
 picture="sxiv -a -s f"
 document="$READER"
+download="$TERMINAL -e aria2c"
 
 data="$1"
 
@@ -31,6 +32,7 @@ open_tmp() {
     && eval "$1 /tmp/$(printf "%s" "$data" | sed "s/.*\///") >/dev/null 2>&1" &
 }
 
+# shellcheck disable=SC1001
 case "$data" in
     *mkv | *mp4 | *webm | *youtube.com/watch* | *youtube.com/playlist* | *youtu.be*)
         notify-send "link handler" "open url in video player:\n$data" \
@@ -47,6 +49,10 @@ case "$data" in
     *pdf | *ps | *djvu | *epub | *cbr | *cbz)
         notify-send "link handler" "open url in document reader:\n$data" \
             && open_tmp "$document"
+    ;;
+    *torrent | magnet\:* | *metalink | *iso)
+        notify-send "link handler" "open url in downloader:\n$data" \
+            && open "$download"
     ;;
     *)
         if [ -f "$data" ]; then
