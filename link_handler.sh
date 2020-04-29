@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# path:       ~/.local/share/repos/newsboat/link_handler.sh
+# path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/newsboat
-# date:       2020-03-25T23:16:47+0100
+# date:       2020-04-29T11:09:37+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
