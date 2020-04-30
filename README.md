@@ -6,4 +6,6 @@ link_handler.sh opens specific programs for pictures, videos, audios, documents,
 
 config files: [dotfiles/newsboat](https://github.com/mrdotx/dotfiles/tree/master/.config/newsboat)
 
+related project: [dotfiles/link-handler](https://github.com/mrdotx/rofi)
+
 usage with [dragon drag-and-drop](https://github.com/mwh/dragon): link_handler.sh $(dragon-drag-and-drop -t -x)"
