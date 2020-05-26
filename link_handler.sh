@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-05-23T00:21:29+0200
+# date:       2020-05-26T12:34:04+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -22,12 +22,12 @@ data="$1"
 }
 
 # open in application and if given, open with tsp (taskspooler)
-open() {
+open(){
     eval "$2" "$1 $data >/dev/null 2>&1" &
 }
 
 # download file to tmp directory before open it
-open_tmp() {
+open_tmp(){
     curl -sL "$data" >"/tmp/$(printf "%s" "$data" \
         | sed "s/.*\///")" \
         && eval "$1 /tmp/$(printf "%s" "$data" \
