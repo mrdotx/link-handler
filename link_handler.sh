@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-05-26T12:34:04+0200
+# date:       2020-06-01T12:33:30+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -15,11 +15,12 @@ download="$TERMINAL -e aria2c"
 
 data="$1"
 
-# if no url or file given exit the application
-[ -z "$data" ] && {
-    notify-send "link handler -> error" "no url or file given, exit..."
-    exit
-}
+# if no url or file given exit the script
+if [ -z "$data" ]; then
+    exit 1
+else
+    notify-send "link handler -> try to open" "$data"
+fi
 
 # open in application and if given, open with tsp (taskspooler)
 open(){
@@ -34,6 +35,7 @@ open_tmp(){
         | sed "s/.*\///") >/dev/null 2>&1" &
 }
 
+
 case "$data" in
     *mkv \
         | *mp4 \
@@ -41,14 +43,12 @@ case "$data" in
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
-        notify-send "link handler -> video" "$data" \
-            && open "$video" "tsp"
+            open "$video" "tsp"
     ;;
     *mp3 \
         | *flac \
         | *opus)
-        notify-send "link handler -> audio" "$data" \
-            && open "$podcast" "tsp"
+            open "$podcast" "tsp"
     ;;
     *jpg \
         | *jpe \
@@ -56,8 +56,7 @@ case "$data" in
         | *png \
         | *gif \
         | *webp)
-        notify-send "link handler -> picture" "$data" \
-            && open_tmp "$picture"
+            open_tmp "$picture"
     ;;
     *pdf \
         | *ps \
@@ -65,23 +64,19 @@ case "$data" in
         | *epub \
         | *cbr \
         | *cbz)
-        notify-send "link handler -> document" "$data" \
-            && open_tmp "$document"
+            open_tmp "$document"
     ;;
     *torrent \
         | 'magnet\:'* \
         | *metalink \
         | *iso)
-        notify-send "link handler -> download" "$data" \
-            && open "$download"
+            open "$download"
     ;;
     *)
         if [ -f "$data" ]; then
-            notify-send "link handler -> edit" "$data" \
-                && open "$edit"
+            open "$edit"
         else
-            notify-send "link handler -> web" "$data" \
-                && open "$web"
+            open "$web"
         fi
     ;;
 esac
