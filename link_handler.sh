@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-06-01T12:33:30+0200
+# date:       2020-06-04T09:21:14+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -46,6 +46,7 @@ case "$data" in
             open "$video" "tsp"
     ;;
     *mp3 \
+        | *ogg \
         | *flac \
         | *opus)
             open "$podcast" "tsp"
