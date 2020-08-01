@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-06-08T11:11:47+0200
+# date:       2020-08-01T12:26:13+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -15,12 +15,8 @@ download="$TERMINAL -e aria2c"
 
 input="$1"
 
-# if no url or file given exit the script
-if [ -z "$input" ]; then
-    exit 1
-else
-    notify-send "link handler -> try to open" "$input"
-fi
+# if no url/file given exit the script
+[ -z "$input" ] && exit 1
 
 # open in application and if given, open with tsp (taskspooler)
 open() {
@@ -43,12 +39,14 @@ case "$input" in
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
+            notify-send "link handler" "add video to taskspooler:\n\n$input"
             open "$video" "tsp"
     ;;
     *mp3 \
         | *ogg \
         | *flac \
         | *opus)
+            notify-send "link handler" "add audio to taskspooler:\n\n$input"
             open "$podcast" "tsp"
     ;;
     *jpg \
@@ -57,6 +55,7 @@ case "$input" in
         | *png \
         | *gif \
         | *webp)
+            notify-send "link handler" "open picture:\n\n$input"
             open_tmp "$picture"
     ;;
     *pdf \
@@ -65,18 +64,22 @@ case "$input" in
         | *epub \
         | *cbr \
         | *cbz)
+            notify-send "link handler" "open document:\n\n$input"
             open_tmp "$document"
     ;;
     *torrent \
         | 'magnet\:'* \
         | *metalink \
         | *iso)
+            notify-send "link handler" "download file:\n\n$input"
             open "$download"
     ;;
     *)
         if [ -f "$input" ]; then
+            notify-send "link handler" "edit file:\n\n$input"
             open "$edit"
         else
+            notify-send "link handler" "open link:\n\n$input"
             open "$web"
         fi
     ;;
