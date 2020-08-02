@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-01T12:26:13+0200
+# date:       2020-08-02T10:27:03+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -39,14 +39,14 @@ case "$input" in
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
-            notify-send "link handler" "add video to taskspooler:\n\n$input"
+            notify-send "link handler - add video to taskspooler" "$input"
             open "$video" "tsp"
     ;;
     *mp3 \
         | *ogg \
         | *flac \
         | *opus)
-            notify-send "link handler" "add audio to taskspooler:\n\n$input"
+            notify-send "link handler - add audio to taskspooler" "$input"
             open "$podcast" "tsp"
     ;;
     *jpg \
@@ -55,7 +55,7 @@ case "$input" in
         | *png \
         | *gif \
         | *webp)
-            notify-send "link handler" "open picture:\n\n$input"
+            notify-send "link handler - open picture" "$input"
             open_tmp "$picture"
     ;;
     *pdf \
@@ -64,22 +64,22 @@ case "$input" in
         | *epub \
         | *cbr \
         | *cbz)
-            notify-send "link handler" "open document:\n\n$input"
+            notify-send "link handler - open document" "$input"
             open_tmp "$document"
     ;;
     *torrent \
         | 'magnet\:'* \
         | *metalink \
         | *iso)
-            notify-send "link handler" "download file:\n\n$input"
+            notify-send "link handler - download file" "$input"
             open "$download"
     ;;
     *)
         if [ -f "$input" ]; then
-            notify-send "link handler" "edit file:\n\n$input"
+            notify-send "link handler - edit file" "$input"
             open "$edit"
         else
-            notify-send "link handler" "open link:\n\n$input"
+            notify-send "link handler - open link" "$input"
             open "$web"
         fi
     ;;
