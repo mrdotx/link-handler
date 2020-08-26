@@ -3,9 +3,9 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-02T10:27:03+0200
+# date:       2020-08-26T18:05:08+0200
 
-web="$BROWSER"
+web="$TERMINAL -e $TERMINAL_BROWSER"
 edit="$TERMINAL -e $EDITOR"
 podcast="$TERMINAL -e mpv --no-audio-display"
 video="mpv --really-quiet"
@@ -80,7 +80,7 @@ case "$input" in
             open "$edit"
         else
             notify-send "link handler - open link" "$input"
-            open "$web"
+            readable -q "$input" > /tmp/newsboat.html && eval "$web" /tmp/newsboat.html &
         fi
     ;;
 esac
