@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-26T21:32:13+0200
+# date:       2020-08-27T11:04:11+0200
 
 web="$TERMINAL -e $TERMINAL_BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -67,10 +67,15 @@ case "$input" in
             notify-send "link handler - open document" "$input"
             open_tmp "$document"
     ;;
-    *torrent \
+    *torrent | *TORRENT \
         | 'magnet\:'* \
         | *metalink | *METALINK \
-        | *iso | *ISO)
+        | *iso | *ISO \
+        | *tar | *TAR \
+        | *tar.gz | *TAR.GZ | *tgz | *TGZ \
+        | *zip | *ZIP \
+        | *7z | *7Z \
+        | *rar | *RAR)
             notify-send "link handler - download file" "$input"
             open "$download"
     ;;
