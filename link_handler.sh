@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-26T18:05:08+0200
+# date:       2020-08-26T21:32:13+0200
 
 web="$TERMINAL -e $TERMINAL_BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -33,44 +33,44 @@ open_tmp() {
 
 
 case "$input" in
-    *mkv \
-        | *mp4 \
-        | *webm \
+    *mkv | *MKV \
+        | *mp4 | *MP4 \
+        | *webm | *WEBM \
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
             notify-send "link handler - add video to taskspooler" "$input"
             open "$video" "tsp"
     ;;
-    *mp3 \
-        | *ogg \
-        | *flac \
-        | *opus)
+    *mp3 | *MP3 \
+        | *ogg | *OGG \
+        | *flac | *FLAC \
+        | *opus | *OPUS)
             notify-send "link handler - add audio to taskspooler" "$input"
             open "$podcast" "tsp"
     ;;
-    *jpg \
-        | *jpe \
-        | *jpeg \
-        | *png \
-        | *gif \
-        | *webp)
+    *jpg | *JPG \
+        | *jpe | *JPE \
+        | *jpeg | *JPEG \
+        | *png | *PNG \
+        | *gif | *GIF \
+        | *webp | *WEBP)
             notify-send "link handler - open picture" "$input"
             open_tmp "$picture"
     ;;
-    *pdf \
-        | *ps \
-        | *djvu \
-        | *epub \
-        | *cbr \
-        | *cbz)
+    *pdf | *PDF \
+        | *ps | *PS \
+        | *djvu | *DJVU \
+        | *epub | *EPUB \
+        | *cbr | *CBR \
+        | *cbz | *CBZ)
             notify-send "link handler - open document" "$input"
             open_tmp "$document"
     ;;
     *torrent \
         | 'magnet\:'* \
-        | *metalink \
-        | *iso)
+        | *metalink | *METALINK \
+        | *iso | *ISO)
             notify-send "link handler - download file" "$input"
             open "$download"
     ;;
