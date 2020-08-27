@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-27T11:04:11+0200
+# date:       2020-08-27T12:53:58+0200
 
 web="$TERMINAL -e $TERMINAL_BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -71,6 +71,8 @@ case "$input" in
         | 'magnet\:'* \
         | *metalink | *METALINK \
         | *iso | *ISO \
+        | *img | *IMG \
+        | *bin | *BIN \
         | *tar | *TAR \
         | *tar.gz | *TAR.GZ | *tgz | *TGZ \
         | *zip | *ZIP \
