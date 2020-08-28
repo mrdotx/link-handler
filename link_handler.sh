@@ -3,9 +3,9 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-27T12:53:58+0200
+# date:       2020-08-28T19:52:36+0200
 
-web="$TERMINAL -e $TERMINAL_BROWSER"
+web="$TERMINAL -e w3m"
 edit="$TERMINAL -e $EDITOR"
 podcast="$TERMINAL -e mpv --no-audio-display"
 video="mpv --really-quiet"
