@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-28T19:52:36+0200
+# date:       2020-08-29T10:51:52+0200
 
 web="$TERMINAL -e w3m"
 edit="$TERMINAL -e $EDITOR"
@@ -87,7 +87,7 @@ case "$input" in
             open "$edit"
         else
             notify-send "link handler - open link" "$input"
-            readable -q "$input" > /tmp/newsboat.html && eval "$web" /tmp/newsboat.html &
+            open "$web"
         fi
     ;;
 esac
