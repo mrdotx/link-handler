@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-08-29T21:32:00+0200
+# date:       2020-09-12T09:35:41+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -13,81 +13,83 @@ picture="sxiv -a -s f"
 document="$READER"
 download="$TERMINAL -e aria2c"
 
-input="$1"
+uri="$1"
 
 # if no url/file given exit the script
-[ -z "$input" ] && exit 1
+[ -z "$uri" ] && exit 1
 
 # open in application and if given, open with tsp (taskspooler)
 open() {
-    eval "$2" "$1 $input >/dev/null 2>&1" &
+    eval "$2" "$1 $uri >/dev/null 2>&1" &
 }
 
 # download file to tmp directory before open it
 open_tmp() {
-    curl -sL "$input" >"/tmp/$(printf "%s" "$input" \
+    curl -sL "$uri" >"/tmp/$(printf "%s" "$uri" \
         | sed "s/.*\///")" \
-        && eval "$1 /tmp/$(printf "%s" "$input" \
+        && eval "$1 /tmp/$(printf "%s" "$uri" \
         | sed "s/.*\///") >/dev/null 2>&1" &
 }
 
 
-case "$input" in
-    *mkv | *MKV \
-        | *mp4 | *MP4 \
-        | *webm | *WEBM \
+case "$uri" in
+    *.mkv | *.MKV \
+        | *.mp4 | *.MP4 \
+        | *.webm | *.WEBM \
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
-            notify-send "link handler - add video to taskspooler" "$input"
+            notify-send "link handler - add video to taskspooler" "$uri"
             open "$video" "tsp"
-    ;;
-    *mp3 | *MP3 \
-        | *ogg | *OGG \
-        | *flac | *FLAC \
-        | *opus | *OPUS)
-            notify-send "link handler - add audio to taskspooler" "$input"
+            ;;
+    *.mp3 | *.MP3 \
+        | *.ogg | *.OGG \
+        | *.flac | *.FLAC \
+        | *.opus | *OPUS)
+            notify-send "link handler - add audio to taskspooler" "$uri"
             open "$podcast" "tsp"
-    ;;
-    *jpg | *JPG \
-        | *jpe | *JPE \
-        | *jpeg | *JPEG \
-        | *png | *PNG \
-        | *gif | *GIF \
-        | *webp | *WEBP)
-            notify-send "link handler - open picture" "$input"
+            ;;
+    *.jpg | *.JPG \
+        | *.jpe | *.JPE \
+        | *.jpeg | *.JPEG \
+        | *.png | *.PNG \
+        | *.gif | *.GIF \
+        | *.webp | *.WEBP)
+            notify-send "link handler - open picture" "$uri"
             open_tmp "$picture"
-    ;;
-    *pdf | *PDF \
-        | *ps | *PS \
-        | *djvu | *DJVU \
-        | *epub | *EPUB \
-        | *cbr | *CBR \
-        | *cbz | *CBZ)
-            notify-send "link handler - open document" "$input"
+            ;;
+    *.pdf | *.PDF \
+        | *.ps | *.PS \
+        | *.djvu | *.DJVU \
+        | *.epub | *.EPUB \
+        | *.cbr | *.CBR \
+        | *.cbz | *.CBZ)
+            notify-send "link handler - open document" "$uri"
             open_tmp "$document"
-    ;;
-    *torrent | *TORRENT \
+            ;;
+    *.torrent | *.TORRENT \
         | 'magnet\:'* \
-        | *metalink | *METALINK \
-        | *iso | *ISO \
-        | *img | *IMG \
-        | *bin | *BIN \
-        | *tar | *TAR \
-        | *tar.gz | *TAR.GZ | *tgz | *TGZ \
-        | *zip | *ZIP \
-        | *7z | *7Z \
-        | *rar | *RAR)
-            notify-send "link handler - download file" "$input"
+        | *.metalink | *.METALINK \
+        | *.iso | *.ISO \
+        | *.img | *.IMG \
+        | *.bin | *.BIN \
+        | *.tar | *.TAR \
+        | *.tar.bz2 | *.TAR.BZ2 | *.tbz2 | *.TBZ2 \
+        | *.tar.gz | *.TAR.GZ | *.tgz | *.TGZ \
+        | *.tar.xz | *.TAR.XZ | *.txz | *.TXZ \
+        | *.zip | *.ZIP \
+        | *.7z | *.7Z \
+        | *.rar | *.RAR)
+            notify-send "link handler - download file" "$uri"
             open "$download"
-    ;;
+            ;;
     *)
-        if [ -f "$input" ]; then
-            notify-send "link handler - edit file" "$input"
+        if [ -f "$uri" ]; then
+            notify-send "link handler - edit file" "$uri"
             open "$edit"
         else
-            notify-send "link handler - open link" "$input"
+            notify-send "link handler - open link" "$uri"
             open "$web"
         fi
-    ;;
+        ;;
 esac
