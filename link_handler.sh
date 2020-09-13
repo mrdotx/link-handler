@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-09-12T09:35:41+0200
+# date:       2020-09-14T00:44:18+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -13,26 +13,69 @@ picture="sxiv -a -s f"
 document="$READER"
 download="$TERMINAL -e aria2c"
 
-uri="$1"
+uri=""
 
-# if no url/file given exit the script
-[ -z "$uri" ] && exit 1
+script=$(basename "$0")
+help="$script [-h/--help] -- script to open links on basis of extensions
+  Usage:
+    $script [--readable] [uri]
+
+  Settings:
+    [--readable] = make the html content readable with readability-cli
+                   (Mozilla's Readability library)
+    [uri]        = uniform resource identifier
+
+  Examples:
+    $script suckless.org
+    $script --readable suckless.org
+
+  Programms:
+    web = $BROWSER
+    edit = $TERMINAL -e $EDITOR
+    podcast = $TERMINAL -e mpv --no-audio-display
+    video = mpv --really-quiet
+    picture = sxiv -a -s f
+    document = $READER
+    download = $TERMINAL -e aria2c"
+
+[ "$#" -gt 0 ] \
+    && uri="$1"
+
+mkdir -p "/tmp/link_handler"
+
+# if no uri/file/setting given exit the script
+[ -z "$uri" ] \
+    && printf "%s\n" "$help" \
+    && exit 1
 
 # open in application and if given, open with tsp (taskspooler)
 open() {
     eval "$2" "$1 $uri >/dev/null 2>&1" &
 }
 
+# open link with readable-cli
+open_readable() {
+    readable -q "$1" > "/tmp/link_handler/readable.html" \
+        && "$web" "/tmp/link_handler/readable.html" &
+}
+
 # download file to tmp directory before open it
 open_tmp() {
-    curl -sL "$uri" >"/tmp/$(printf "%s" "$uri" \
+    curl -sL "$uri" > "/tmp/link_handler/$(printf "%s" "$uri" \
         | sed "s/.*\///")" \
-        && eval "$1 /tmp/$(printf "%s" "$uri" \
+        && eval "$1 /tmp/link_handler/$(printf "%s" "$uri" \
         | sed "s/.*\///") >/dev/null 2>&1" &
 }
 
-
 case "$uri" in
+    -h | --help)
+        printf "%s\n" "$help"
+        ;;
+    --readable)
+       [ -n "$2" ] \
+            && notify-send "link handler - open link readable" "$2" \
+            && open_readable "$2"
+        ;;
     *.mkv | *.MKV \
         | *.mp4 | *.MP4 \
         | *.webm | *.WEBM \
