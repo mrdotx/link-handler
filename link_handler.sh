@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-09-14T00:44:18+0200
+# date:       2020-09-14T09:59:36+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -13,7 +13,8 @@ picture="sxiv -a -s f"
 document="$READER"
 download="$TERMINAL -e aria2c"
 
-uri=""
+tmp="/tmp/link_handler"
+uri="$1"
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
@@ -36,14 +37,16 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     video = mpv --really-quiet
     picture = sxiv -a -s f
     document = $READER
-    download = $TERMINAL -e aria2c"
+    download = $TERMINAL -e aria2c
 
-[ "$#" -gt 0 ] \
-    && uri="$1"
+  Examples:
+    $script suckless.org
+    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
+    $script --readable suckless.org"
 
-mkdir -p "/tmp/link_handler"
+mkdir -p "$tmp"
 
-# if no uri/file/setting given exit the script
+# if no uri/file/setting is given, exit the script
 [ -z "$uri" ] \
     && printf "%s\n" "$help" \
     && exit 1
@@ -53,17 +56,18 @@ open() {
     eval "$2" "$1 $uri >/dev/null 2>&1" &
 }
 
-# open link with readable-cli
+# convert content with readable-cli before open it
 open_readable() {
-    readable -q "$1" > "/tmp/link_handler/readable.html" \
-        && "$web" "/tmp/link_handler/readable.html" &
+    tmp_file=$(mktemp $tmp/readable_XXXXXX --suffix=.html) \
+        && readable -q "$1" > "$tmp_file" \
+        && "$web" "$tmp_file" &
 }
 
 # download file to tmp directory before open it
 open_tmp() {
-    curl -sL "$uri" > "/tmp/link_handler/$(printf "%s" "$uri" \
+    curl -sL "$uri" > "$tmp/$(printf "%s" "$uri" \
         | sed "s/.*\///")" \
-        && eval "$1 /tmp/link_handler/$(printf "%s" "$uri" \
+        && eval "$1 $tmp/$(printf "%s" "$uri" \
         | sed "s/.*\///") >/dev/null 2>&1" &
 }
 
