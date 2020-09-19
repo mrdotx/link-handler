@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-09-16T08:22:17+0200
+# date:       2020-09-19T19:26:35+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -66,9 +66,9 @@ open_readable() {
 # download file to tmp directory before open it
 open_tmp() {
     curl -sL "$uri" > "$tmp/$(printf "%s" "$uri" \
-        | sed "s/.*\///")" \
+        | sed 's/.*\///')" \
         && eval "$1 $tmp/$(printf "%s" "$uri" \
-        | sed "s/.*\///") >/dev/null 2>&1" &
+        | sed 's/.*\///') >/dev/null 2>&1" &
 }
 
 case "$uri" in
