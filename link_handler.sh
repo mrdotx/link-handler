@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-09-19T19:26:35+0200
+# date:       2020-10-05T19:31:28+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -53,7 +53,7 @@ mkdir -p "$tmp"
 
 # open in application and if given, open with tsp (taskspooler)
 open() {
-    eval "$2" "$1 $uri >/dev/null 2>&1" &
+    eval "$2" "$1 '$uri' >/dev/null 2>&1" &
 }
 
 # convert content with readable-cli before open it
