@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-07T12:17:46+0200
+# date:       2020-10-07T13:25:52+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -59,12 +59,12 @@ open() {
 # save to tmp file and open in application
 open_tmp() {
     if [ "$2" = "readable" ]; then
-        extension=".html"
+        extension="html"
     else
-        extension=".${uri##*.}"
+        extension="${uri##*.}"
     fi
 
-    tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix="$extension")
+    tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
 
     if [ "$2" = "readable" ]; then
         readable -q "$1" > "$tmp_file" \
