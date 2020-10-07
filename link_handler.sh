@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-05T19:31:28+0200
+# date:       2020-10-07T12:17:46+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -56,19 +56,23 @@ open() {
     eval "$2" "$1 '$uri' >/dev/null 2>&1" &
 }
 
-# convert content with readable-cli before open it
-open_readable() {
-    tmp_file=$(mktemp $tmp/readable_XXXXXX --suffix=.html) \
-        && readable -q "$1" > "$tmp_file" \
-        && "$web" "$tmp_file" &
-}
-
-# download file to tmp directory before open it
+# save to tmp file and open in application
 open_tmp() {
-    curl -sL "$uri" > "$tmp/$(printf "%s" "$uri" \
-        | sed 's/.*\///')" \
-        && eval "$1 $tmp/$(printf "%s" "$uri" \
-        | sed 's/.*\///') >/dev/null 2>&1" &
+    if [ "$2" = "readable" ]; then
+        extension=".html"
+    else
+        extension=".${uri##*.}"
+    fi
+
+    tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix="$extension")
+
+    if [ "$2" = "readable" ]; then
+        readable -q "$1" > "$tmp_file" \
+            && "$web" "$tmp_file" &
+    else
+        curl -sL "$uri" > "$tmp_file" \
+            && $1 "$tmp_file" >/dev/null 2>&1 &
+    fi
 }
 
 case "$uri" in
@@ -78,7 +82,7 @@ case "$uri" in
     --readable)
        [ -n "$2" ] \
             && notify-send "link handler - open link readable" "$2" \
-            && open_readable "$2"
+            && open_tmp "$2" "readable"
         ;;
     *.mkv | *.MKV \
         | *.mp4 | *.MP4 \
