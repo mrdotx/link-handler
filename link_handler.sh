@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-08T11:44:25+0200
+# date:       2020-10-08T12:40:44+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -38,17 +38,19 @@ check() {
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
-    $script [--readable] [uri]
+    $script [--readable/--tmpdelete] [uri]
 
   Settings:
     [--readable] = make the html content readable with readability-cli
                    (Mozilla's Readability library)
+    [--tmpdelete]   = delete the tmp files created with this script
     [uri]        = uniform resource identifier
 
   Examples:
     $script suckless.org
     $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
     $script --readable suckless.org
+    $script --tmpdelete
 
   Programs:
     $(check)
@@ -102,6 +104,9 @@ case "$uri" in
        [ -n "$2" ] \
             && notify-send "link handler - open link readable" "$2" \
             && open_tmp "$2" "readable"
+        ;;
+    --tmpdelete)
+        rm -rf "$tmp"
         ;;
     *.mkv | *.MKV \
         | *.mp4 | *.MP4 \
