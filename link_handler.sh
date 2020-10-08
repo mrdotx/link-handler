@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-08T14:58:20+0200
+# date:       2020-10-08T15:11:47+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -106,7 +106,7 @@ case "$uri" in
             && open_tmp "$2" "readable"
         ;;
     --tmpdelete)
-        notify-send "link handler - delete tmp files" "quantity: $(find $tmp -type f | wc -l)"
+        notify-send "link handler - delete $(find $tmp -type f | wc -l) tmp files"
         rm -rf "$tmp"
         ;;
     *.mkv | *.MKV \
