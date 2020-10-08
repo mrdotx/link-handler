@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-08T15:11:47+0200
+# date:       2020-10-08T18:47:36+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -41,10 +41,10 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     $script [--readable/--tmpdelete] [uri]
 
   Settings:
-    [--readable] = make the html content readable with readability-cli
-                   (Mozilla's Readability library)
-    [--tmpdelete]   = delete the tmp files created with this script
-    [uri]        = uniform resource identifier
+    [--readable]  = make the html content readable with readability-cli
+                    (Mozilla's Readability library)
+    [--tmpdelete] = delete the tmp files created with this script
+    [uri]         = uniform resource identifier
 
   Examples:
     $script suckless.org
