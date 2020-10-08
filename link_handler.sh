@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-07T13:25:52+0200
+# date:       2020-10-08T11:44:25+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -14,7 +14,26 @@ document="$READER"
 download="$TERMINAL -e aria2c"
 
 tmp="/tmp/link_handler"
-uri="$1"
+
+check() {
+    used_tools="
+        tsp
+        readable"
+
+    printf "required tools marked with an X are installed\n"
+
+    printf "%s\n" "$used_tools" | {
+        while IFS= read -r line; do
+            [ -n "$line" ] \
+                && tool=$(printf "%s" "$line" | sed 's/ //g') \
+                &&  if command -v "$tool" > /dev/null 2>&1; then
+                        printf "      [X] %s\n" "$tool"
+                    else
+                        printf "      [ ] %s\n" "$tool"
+                    fi
+        done
+    }
+}
 
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
@@ -28,23 +47,21 @@ help="$script [-h/--help] -- script to open links on basis of extensions
 
   Examples:
     $script suckless.org
+    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
     $script --readable suckless.org
 
-  Programms:
-    web = $BROWSER
-    edit = $TERMINAL -e $EDITOR
-    podcast = $TERMINAL -e mpv --no-audio-display
-    video = mpv --really-quiet
-    picture = sxiv -a -s f
-    document = $READER
-    download = $TERMINAL -e aria2c
+  Programs:
+    $(check)
 
-  Examples:
-    $script suckless.org
-    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
-    $script --readable suckless.org"
+    web = $web
+    edit = $edit
+    podcast = $podcast
+    video = $video
+    picture = $picture
+    document = $document
+    download = $download"
 
-mkdir -p "$tmp"
+uri="$1"
 
 # if no uri/file/setting is given, exit the script
 [ -z "$uri" ] \
@@ -58,6 +75,8 @@ open() {
 
 # save to tmp file and open in application
 open_tmp() {
+    mkdir -p "$tmp"
+
     if [ "$2" = "readable" ]; then
         extension="html"
     else
