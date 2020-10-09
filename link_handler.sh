@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-08T18:47:36+0200
+# date:       2020-10-09T18:53:07+0200
 
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
@@ -17,10 +17,9 @@ tmp="/tmp/link_handler"
 
 check() {
     used_tools="
-        tsp
-        readable"
+        tsp"
 
-    printf "required tools marked with an X are installed\n"
+    printf "required tools for full functionality. tools marked with an X are installed\n"
 
     printf "%s\n" "$used_tools" | {
         while IFS= read -r line; do
@@ -41,7 +40,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     $script [--readable/--tmpdelete] [uri]
 
   Settings:
-    [--readable]  = make the html content readable with readability-cli
+    [--readable]  = make the html content readable with python readability-lxml
                     (Mozilla's Readability library)
     [--tmpdelete] = delete the tmp files created with this script
     [uri]         = uniform resource identifier
@@ -88,7 +87,7 @@ open_tmp() {
     tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
 
     if [ "$2" = "readable" ]; then
-        readable -q "$1" > "$tmp_file" \
+        python -W ignore -m readability.readability -u "$1" > "$tmp_file" \
             && "$web" "$tmp_file" &
     else
         curl -sL "$uri" > "$tmp_file" \
