@@ -3,37 +3,22 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-09T18:53:07+0200
+# date:       2020-10-10T15:37:15+0200
 
+# config
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
-podcast="$TERMINAL -e mpv"
-video="mpv --really-quiet"
+podcast="tsp $TERMINAL -e mpv --no-audio-display"
+video="tsp mpv --really-quiet"
 picture="sxiv -a -s f"
 document="$READER"
 download="$TERMINAL -e aria2c"
 
 tmp="/tmp/link_handler"
+tmp_readable="python -W ignore -m readability.readability -u"
+tmp_download="curl -sL"
 
-check() {
-    used_tools="
-        tsp"
-
-    printf "required tools for full functionality. tools marked with an X are installed\n"
-
-    printf "%s\n" "$used_tools" | {
-        while IFS= read -r line; do
-            [ -n "$line" ] \
-                && tool=$(printf "%s" "$line" | sed 's/ //g') \
-                &&  if command -v "$tool" > /dev/null 2>&1; then
-                        printf "      [X] %s\n" "$tool"
-                    else
-                        printf "      [ ] %s\n" "$tool"
-                    fi
-        done
-    }
-}
-
+# help
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
@@ -42,7 +27,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
   Settings:
     [--readable]  = make the html content readable with python readability-lxml
                     (Mozilla's Readability library)
-    [--tmpdelete] = delete the tmp files created with this script
+    [--tmpdelete] = delete folder $tmp recursive
     [uri]         = uniform resource identifier
 
   Examples:
@@ -51,16 +36,18 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     $script --readable suckless.org
     $script --tmpdelete
 
-  Programs:
-    $(check)
+  Config:
+    web           = $web
+    edit          = $edit
+    podcast       = $podcast
+    video         = $video
+    picture       = $picture
+    document      = $document
+    download      = $download
 
-    web = $web
-    edit = $edit
-    podcast = $podcast
-    video = $video
-    picture = $picture
-    document = $document
-    download = $download"
+    tmp           = $tmp
+    tmp_readable  = $tmp_readable
+    tmp_download  = $tmp_download"
 
 uri="$1"
 
@@ -69,9 +56,9 @@ uri="$1"
     && printf "%s\n" "$help" \
     && exit 1
 
-# open in application and if given, open with tsp (taskspooler)
+# open in application and suppress output
 open() {
-    eval "$2" "$1 '$uri' >/dev/null 2>&1" &
+    $1 "$uri" >/dev/null 2>&1 &
 }
 
 # save to tmp file and open in application
@@ -87,10 +74,10 @@ open_tmp() {
     tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
 
     if [ "$2" = "readable" ]; then
-        python -W ignore -m readability.readability -u "$1" > "$tmp_file" \
+        $tmp_readable "$1" > "$tmp_file" \
             && "$web" "$tmp_file" &
     else
-        curl -sL "$uri" > "$tmp_file" \
+        $tmp_download "$uri" > "$tmp_file" \
             && $1 "$tmp_file" >/dev/null 2>&1 &
     fi
 }
@@ -115,14 +102,14 @@ case "$uri" in
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
             notify-send "link handler - add video to taskspooler" "$uri"
-            open "$video" "tsp"
+            open "$video"
             ;;
     *.mp3 | *.MP3 \
         | *.ogg | *.OGG \
         | *.flac | *.FLAC \
         | *.opus | *OPUS)
             notify-send "link handler - add audio to taskspooler" "$uri"
-            open "$podcast" "tsp"
+            open "$podcast"
             ;;
     *.jpg | *.JPG \
         | *.jpe | *.JPE \
