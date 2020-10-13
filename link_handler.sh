@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-10T15:37:15+0200
+# date:       2020-10-13T09:18:02+0200
 
 # config
 web="$BROWSER"
@@ -87,13 +87,14 @@ case "$uri" in
         printf "%s\n" "$help"
         ;;
     --readable)
-       [ -n "$2" ] \
+        [ -n "$2" ] \
             && notify-send "link handler - open link readable" "$2" \
             && open_tmp "$2" "readable"
         ;;
     --tmpdelete)
-        notify-send "link handler - delete $(find $tmp -type f | wc -l) tmp files"
-        rm -rf "$tmp"
+        [ -d "$tmp" ] \
+            && notify-send "link handler - delete $(find $tmp -type f | wc -l) tmp files" \
+            && rm -rf "$tmp"
         ;;
     *.mkv | *.MKV \
         | *.mp4 | *.MP4 \
