@@ -3,14 +3,14 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-13T09:18:02+0200
+# date:       2020-10-24T18:40:02+0200
 
 # config
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
 podcast="tsp $TERMINAL -e mpv --no-audio-display"
 video="tsp mpv --really-quiet"
-picture="sxiv -a -s f"
+picture="sxiv -a -s d"
 document="$READER"
 download="$TERMINAL -e aria2c"
 
