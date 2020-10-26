@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-25T07:18:00+0100
+# date:       2020-10-26T22:12:30+0100
 
 # config
 web="$BROWSER"
@@ -56,30 +56,32 @@ uri="$1"
     && printf "%s\n" "$help" \
     && exit 1
 
-# open in application and suppress output
+# open in application with/-out tmp file
 open() {
-    $1 "$uri" >/dev/null 2>&1 &
-}
+    case "$1" in
+        "tmp")
+            mkdir -p "$tmp"
 
-# save to tmp file and open in application
-open_tmp() {
-    mkdir -p "$tmp"
+            if [ "$3" = "readable" ]; then
+                extension="html"
+            else
+                extension="${uri##*.}"
+            fi
 
-    if [ "$2" = "readable" ]; then
-        extension="html"
-    else
-        extension="${uri##*.}"
-    fi
+            tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
 
-    tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
-
-    if [ "$2" = "readable" ]; then
-        $tmp_readable "$1" > "$tmp_file" \
-            && "$web" "$tmp_file" &
-    else
-        $tmp_download "$uri" > "$tmp_file" \
-            && $1 "$tmp_file" >/dev/null 2>&1 &
-    fi
+            if [ "$3" = "readable" ]; then
+                $tmp_readable "$2" > "$tmp_file" \
+                    && "$web" "$tmp_file"
+            else
+                $tmp_download "$uri" > "$tmp_file" \
+                    && $2 "$tmp_file"
+            fi
+            ;;
+        *)
+            $1 "$uri"
+            ;;
+    esac
 }
 
 case "$uri" in
@@ -89,11 +91,11 @@ case "$uri" in
     --readable)
         [ -n "$2" ] \
             && notify-send "link handler - open link readable" "$2" \
-            && open_tmp "$2" "readable"
+            && open tmp "$2" "readable"
         ;;
     --tmpdelete)
         [ -d "$tmp" ] \
-            && notify-send "link handler - delete $(find $tmp -type f | wc -l) tmp files" \
+            && notify-send "link handler - delete tmp files" "quantity: $(find $tmp -type f | wc -l)" \
             && rm -rf "$tmp"
         ;;
     *.mkv | *.MKV \
@@ -119,7 +121,7 @@ case "$uri" in
         | *.gif | *.GIF \
         | *.webp | *.WEBP)
             notify-send "link handler - open picture" "$uri"
-            open_tmp "$picture"
+            open tmp "$picture"
             ;;
     *.pdf | *.PDF \
         | *.ps | *.PS \
@@ -128,7 +130,7 @@ case "$uri" in
         | *.cbr | *.CBR \
         | *.cbz | *.CBZ)
             notify-send "link handler - open document" "$uri"
-            open_tmp "$document"
+            open tmp "$document"
             ;;
     *.torrent | *.TORRENT \
         | 'magnet\:'* \
