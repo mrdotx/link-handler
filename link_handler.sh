@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-27T21:50:36+0100
+# date:       2020-10-30T23:08:29+0100
 
 # config
 web="$BROWSER"
@@ -90,12 +90,16 @@ case "$uri" in
         ;;
     --readable)
         [ -n "$2" ] \
-            && notify-send "link handler - open link readable" "$2" \
+            && notify-send \
+                "link handler - open link readable" \
+                "$2" \
             && open tmp "$2" "readable"
         ;;
     --tmpdelete)
         [ -d "$tmp" ] \
-            && notify-send "link handler - delete tmp files" "quantity: $(find $tmp -type f | wc -l)" \
+            && notify-send \
+                "link handler - delete tmp files" \
+                "quantity: $(find $tmp -type f | wc -l)" \
             && rm -rf "$tmp"
         ;;
     *.mkv | *.MKV \
@@ -104,14 +108,18 @@ case "$uri" in
         | *'youtube.com/watch'* \
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
-            notify-send "link handler - add video to taskspooler" "$uri"
+            notify-send \
+                "link handler - add video to taskspooler" \
+                "$uri"
             open "$video"
             ;;
     *.mp3 | *.MP3 \
         | *.ogg | *.OGG \
         | *.flac | *.FLAC \
         | *.opus | *OPUS)
-            notify-send "link handler - add audio to taskspooler" "$uri"
+            notify-send \
+                "link handler - add audio to taskspooler" \
+                "$uri"
             open "$podcast"
             ;;
     *.jpg | *.JPG \
@@ -120,7 +128,9 @@ case "$uri" in
         | *.png | *.PNG \
         | *.gif | *.GIF \
         | *.webp | *.WEBP)
-            notify-send "link handler - open picture" "$uri"
+            notify-send \
+                "link handler - open picture" \
+                "$uri"
             open tmp "$picture"
             ;;
     *.pdf | *.PDF \
@@ -129,7 +139,9 @@ case "$uri" in
         | *.epub | *.EPUB \
         | *.cbr | *.CBR \
         | *.cbz | *.CBZ)
-            notify-send "link handler - open document" "$uri"
+            notify-send \
+                "link handler - open document" \
+                "$uri"
             open tmp "$document"
             ;;
     *.torrent | *.TORRENT \
@@ -145,15 +157,21 @@ case "$uri" in
         | *.zip | *.ZIP \
         | *.7z | *.7Z \
         | *.rar | *.RAR)
-            notify-send "link handler - download file" "$uri"
+            notify-send \
+                "link handler - download file" \
+                "$uri"
             open "$download"
             ;;
     *)
         if [ -f "$uri" ]; then
-            notify-send "link handler - edit file" "$uri"
+            notify-send \
+                "link handler - edit file" \
+                "$uri"
             open "$edit"
         else
-            notify-send "link handler - open link" "$uri"
+            notify-send \
+                "link handler - open link" \
+                "$uri"
             open "$web"
         fi
         ;;
