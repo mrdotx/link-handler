@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-10-30T23:08:29+0100
+# date:       2020-11-05T10:44:12+0100
 
 # config
 web="$BROWSER"
@@ -56,6 +56,8 @@ uri="$1"
     && printf "%s\n" "$help" \
     && exit 1
 
+uri_lower="$(printf "%s" "$uri" | tr '[:upper:]' '[:lower:]')"
+
 # open in application with/-out tmp file
 open() {
     case "$1" in
@@ -65,7 +67,7 @@ open() {
             if [ "$3" = "readable" ]; then
                 extension="html"
             else
-                extension="${uri##*.}"
+                extension="${uri_lower##*.}"
             fi
 
             tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
@@ -84,7 +86,7 @@ open() {
     esac
 }
 
-case "$uri" in
+case "$uri_lower" in
     -h | --help)
         printf "%s\n" "$help"
         ;;
@@ -102,61 +104,34 @@ case "$uri" in
                 "quantity: $(find $tmp -type f | wc -l)" \
             && rm -rf "$tmp"
         ;;
-    *.mkv | *.MKV \
-        | *.mp4 | *.MP4 \
-        | *.webm | *.WEBM \
-        | *'youtube.com/watch'* \
-        | *'youtube.com/playlist'* \
+    *.mkv | *.mp4 | *.webm | *'youtube.com/watch'* | *'youtube.com/playlist'* \
         | *'youtu.be'*)
             notify-send \
                 "link handler - add video to taskspooler" \
                 "$uri"
             open "$video"
             ;;
-    *.mp3 | *.MP3 \
-        | *.ogg | *.OGG \
-        | *.flac | *.FLAC \
-        | *.opus | *OPUS)
+    *.mp3 | *.ogg | *.flac | *.opus)
             notify-send \
                 "link handler - add audio to taskspooler" \
                 "$uri"
             open "$podcast"
             ;;
-    *.jpg | *.JPG \
-        | *.jpe | *.JPE \
-        | *.jpeg | *.JPEG \
-        | *.png | *.PNG \
-        | *.gif | *.GIF \
-        | *.webp | *.WEBP)
+    *.jpg | *.jpe | *.jpeg | *.png | *.gif | *.webp)
             notify-send \
                 "link handler - open picture" \
                 "$uri"
             open tmp "$picture"
             ;;
-    *.pdf | *.PDF \
-        | *.ps | *.PS \
-        | *.djvu | *.DJVU \
-        | *.epub | *.EPUB \
-        | *.cbr | *.CBR \
-        | *.cbz | *.CBZ)
+    *.pdf | *.ps | *.djvu | *.epub | *.cbr | *.cbz)
             notify-send \
                 "link handler - open document" \
                 "$uri"
             open tmp "$document"
             ;;
-    *.torrent | *.TORRENT \
-        | 'magnet\:'* \
-        | *.metalink | *.METALINK \
-        | *.iso | *.ISO \
-        | *.img | *.IMG \
-        | *.bin | *.BIN \
-        | *.tar | *.TAR \
-        | *.tar.bz2 | *.TAR.BZ2 | *.tbz2 | *.TBZ2 \
-        | *.tar.gz | *.TAR.GZ | *.tgz | *.TGZ \
-        | *.tar.xz | *.TAR.XZ | *.txz | *.TXZ \
-        | *.zip | *.ZIP \
-        | *.7z | *.7Z \
-        | *.rar | *.RAR)
+    *.torrent | 'magnet\:'* | *.metalink | *.iso | *.img | *.bin | *.tar \
+        | *.tar.bz2 | *.tbz2 | *.tar.gz | *.tgz | *.tar.xz | *.txz | *.zip \
+        | *.7z | *.rar)
             notify-send \
                 "link handler - download file" \
                 "$uri"
