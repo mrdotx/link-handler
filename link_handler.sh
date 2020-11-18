@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-11-05T10:44:12+0100
+# date:       2020-11-18T13:53:09+0100
 
 # config
 web="$BROWSER"
@@ -14,7 +14,7 @@ picture="sxiv -q -a -s w"
 document="$READER"
 download="$TERMINAL -e terminal_wrapper.sh aria2c"
 
-tmp="/tmp/link_handler"
+tmp_folder="/tmp/link_handler"
 tmp_readable="python -W ignore -m readability.readability -u"
 tmp_download="curl -sL"
 
@@ -27,7 +27,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
   Settings:
     [--readable]  = make the html content readable with python readability-lxml
                     (Mozilla's Readability library)
-    [--tmpdelete] = delete folder $tmp recursive
+    [--tmpdelete] = delete folder $tmp_folder recursive
     [uri]         = uniform resource identifier
 
   Examples:
@@ -45,40 +45,34 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     document      = $document
     download      = $download
 
-    tmp           = $tmp
+    tmp_folder    = $tmp_folder
     tmp_readable  = $tmp_readable
     tmp_download  = $tmp_download"
 
-uri="$1"
-
 # if no uri/file/setting is given, exit the script
-[ -z "$uri" ] \
+[ -z "$1" ] \
     && printf "%s\n" "$help" \
     && exit 1
 
-uri_lower="$(printf "%s" "$uri" | tr '[:upper:]' '[:lower:]')"
+uri="$1"
+uri_lower="$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')"
 
-# open in application with/-out tmp file
+# open with/-out tmp file or readable
 open() {
     case "$1" in
-        "tmp")
-            mkdir -p "$tmp"
+        "--readable")
+            mkdir -p "$tmp_folder"
+            tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".html")
 
-            if [ "$3" = "readable" ]; then
-                extension="html"
-            else
-                extension="${uri_lower##*.}"
-            fi
+            $tmp_readable "$2" > "$tmp_file" \
+                && "$web" "$tmp_file"
+            ;;
+        "--tmp")
+            mkdir -p "$tmp_folder"
+            tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".${uri_lower##*.}")
 
-            tmp_file=$(mktemp "$tmp/open_tmp_XXXXXX" --suffix=".$extension")
-
-            if [ "$3" = "readable" ]; then
-                $tmp_readable "$2" > "$tmp_file" \
-                    && "$web" "$tmp_file"
-            else
-                $tmp_download "$uri" > "$tmp_file" \
-                    && $2 "$tmp_file"
-            fi
+            $tmp_download "$uri" > "$tmp_file" \
+                && $2 "$tmp_file"
             ;;
         *)
             $1 "$uri"
@@ -95,14 +89,14 @@ case "$uri_lower" in
             && notify-send \
                 "link handler - open link readable" \
                 "$2" \
-            && open tmp "$2" "readable"
+            && open "$uri_lower" "$2"
         ;;
     --tmpdelete)
-        [ -d "$tmp" ] \
+        [ -d "$tmp_folder" ] \
             && notify-send \
                 "link handler - delete tmp files" \
-                "quantity: $(find $tmp -type f | wc -l)" \
-            && rm -rf "$tmp"
+                "quantity: $(find $tmp_folder -type f | wc -l)" \
+            && rm -rf "$tmp_folder"
         ;;
     *.mkv | *.mp4 | *.webm | *'youtube.com/watch'* | *'youtube.com/playlist'* \
         | *'youtu.be'*)
@@ -121,13 +115,13 @@ case "$uri_lower" in
             notify-send \
                 "link handler - open picture" \
                 "$uri"
-            open tmp "$picture"
+            open --tmp "$picture" &
             ;;
     *.pdf | *.ps | *.djvu | *.epub | *.cbr | *.cbz)
             notify-send \
                 "link handler - open document" \
                 "$uri"
-            open tmp "$document"
+            open --tmp "$document" &
             ;;
     *.torrent | 'magnet\:'* | *.metalink | *.iso | *.img | *.bin | *.tar \
         | *.tar.bz2 | *.tbz2 | *.tar.gz | *.tgz | *.tar.xz | *.txz | *.zip \
