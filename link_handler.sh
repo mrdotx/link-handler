@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-11-18T13:53:09+0100
+# date:       2020-11-19T22:51:47+0100
 
 # config
 web="$BROWSER"
@@ -59,19 +59,20 @@ uri_lower="$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')"
 
 # open with/-out tmp file or readable
 open() {
+    create_tmp() {
+        mkdir -p "$tmp_folder"
+        tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".$1")
+    }
+
     case "$1" in
         "--readable")
-            mkdir -p "$tmp_folder"
-            tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".html")
-
-            $tmp_readable "$2" > "$tmp_file" \
+            create_tmp "html" \
+                && $tmp_readable "$2" > "$tmp_file" \
                 && "$web" "$tmp_file"
             ;;
         "--tmp")
-            mkdir -p "$tmp_folder"
-            tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".${uri_lower##*.}")
-
-            $tmp_download "$uri" > "$tmp_file" \
+            create_tmp "${uri_lower##*.}" \
+                && $tmp_download "$uri" > "$tmp_file" \
                 && $2 "$tmp_file"
             ;;
         *)
