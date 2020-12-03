@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-12-03T18:31:21+0100
+# date:       2020-12-03T19:13:13+0100
 
 # config
 web="$BROWSER"
@@ -57,7 +57,7 @@ uri_lower="$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')"
 # open with/-out tmp file or readable
 open() {
     open_tmp() {
-        tmp_file=$(mktemp -t open_tmp_XXXXXX --suffix=".$1")
+        tmp_file=$(mktemp -t link_handler_XXXXXX --suffix=".$1")
             $2 "$3" > "$tmp_file" \
             && $4 "$tmp_file" \
             && rm -rf "$tmp_file"
