@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-11-19T22:51:47+0100
+# date:       2020-12-03T18:31:21+0100
 
 # config
 web="$BROWSER"
@@ -14,7 +14,6 @@ picture="sxiv -q -a -s w"
 document="$READER"
 download="$TERMINAL -e terminal_wrapper.sh aria2c"
 
-tmp_folder="/tmp/link_handler"
 tmp_readable="python -W ignore -m readability.readability -u"
 tmp_download="curl -sL"
 
@@ -22,12 +21,11 @@ tmp_download="curl -sL"
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
-    $script [--readable/--tmpdelete] [uri]
+    $script [--readable] [uri]
 
   Settings:
     [--readable]  = make the html content readable with python readability-lxml
                     (Mozilla's Readability library)
-    [--tmpdelete] = delete folder $tmp_folder recursive
     [uri]         = uniform resource identifier
 
   Examples:
@@ -45,7 +43,6 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     document      = $document
     download      = $download
 
-    tmp_folder    = $tmp_folder
     tmp_readable  = $tmp_readable
     tmp_download  = $tmp_download"
 
@@ -59,21 +56,19 @@ uri_lower="$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')"
 
 # open with/-out tmp file or readable
 open() {
-    create_tmp() {
-        mkdir -p "$tmp_folder"
-        tmp_file=$(mktemp "$tmp_folder/open_tmp_XXXXXX" --suffix=".$1")
+    open_tmp() {
+        tmp_file=$(mktemp -t open_tmp_XXXXXX --suffix=".$1")
+            $2 "$3" > "$tmp_file" \
+            && $4 "$tmp_file" \
+            && rm -rf "$tmp_file"
     }
 
     case "$1" in
         "--readable")
-            create_tmp "html" \
-                && $tmp_readable "$2" > "$tmp_file" \
-                && "$web" "$tmp_file"
+            open_tmp "html" "$tmp_readable" "$2" "$web"
             ;;
         "--tmp")
-            create_tmp "${uri_lower##*.}" \
-                && $tmp_download "$uri" > "$tmp_file" \
-                && $2 "$tmp_file"
+            open_tmp "${uri_lower##*.}" "$tmp_download" "$uri" "$2"
             ;;
         *)
             $1 "$uri"
@@ -91,13 +86,6 @@ case "$uri_lower" in
                 "link handler - open link readable" \
                 "$2" \
             && open "$uri_lower" "$2"
-        ;;
-    --tmpdelete)
-        [ -d "$tmp_folder" ] \
-            && notify-send \
-                "link handler - delete tmp files" \
-                "quantity: $(find $tmp_folder -type f | wc -l)" \
-            && rm -rf "$tmp_folder"
         ;;
     *.mkv | *.mp4 | *.webm | *'youtube.com/watch'* | *'youtube.com/playlist'* \
         | *'youtu.be'*)
