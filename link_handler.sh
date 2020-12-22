@@ -3,7 +3,7 @@
 # path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author:     klassiker [mrdotx]
 # github:     https://github.com/mrdotx/link-handler
-# date:       2020-12-03T20:33:48+0100
+# date:       2020-12-22T14:17:33+0100
 
 # config
 web="$BROWSER"
@@ -15,7 +15,7 @@ document="$READER"
 download="$TERMINAL -e terminal_wrapper.sh aria2c"
 
 tmp_readable="python -W ignore -m readability.readability -u"
-tmp_download="curl -sL"
+tmp_download="wget -qO -"
 
 # help
 script=$(basename "$0")
@@ -32,7 +32,6 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     $script suckless.org
     $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
     $script --readable suckless.org
-    $script --tmpdelete
 
   Config:
     web           = $web
