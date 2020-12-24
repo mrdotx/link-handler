@@ -9,6 +9,5 @@ config files: [dotfiles/newsboat](https://github.com/mrdotx/dotfiles/tree/master
 related projects:
 
 - [dmenu](https://github.com/mrdotx/dmenu)
-- [rofi](https://github.com/mrdotx/rofi)
 
 usage with [dragon drag-and-drop](https://github.com/mwh/dragon): link_handler.sh $(dragon-drag-and-drop -t -x)"
