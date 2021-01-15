@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# path:       /home/klassiker/.local/share/repos/link-handler/link_handler.sh
-# author:     klassiker [mrdotx]
-# github:     https://github.com/mrdotx/link-handler
-# date:       2020-12-22T15:25:47+0100
+# path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
+# author: klassiker [mrdotx]
+# github: https://github.com/mrdotx/link-handler
+# date:   2021-01-15T13:37:03+0100
 
 # config
 web="$BROWSER"
