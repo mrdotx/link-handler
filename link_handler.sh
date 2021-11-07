@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2021-01-15T13:37:03+0100
+# date:   2021-11-07T12:45:12+0100
 
 # config
 web="$BROWSER"
@@ -21,16 +21,18 @@ tmp_readable="python -W ignore -m readability.readability -u"
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
-    $script [--readable] [uri]
+    $script [--clipboard] [--readable] [uri]
 
   Settings:
+    [--clipboard] = open uri from clipboard
     [--readable]  = make the html content readable with python readability-lxml
                     (Mozilla's Readability library)
     [uri]         = uniform resource identifier
 
   Examples:
     $script suckless.org
-    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor2.jpg
+    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor1.jpg
+    $script --clipboard
     $script --readable suckless.org
 
   Config:
@@ -45,21 +47,31 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     tmp_download  = $tmp_download
     tmp_readable  = $tmp_readable"
 
-# if no uri/file/setting is given, exit the script
-[ -z "$1" ] \
-    && printf "%s\n" "$help" \
-    && exit 1
+case "$1" in
+    -h | --help | '')
+        printf "%s\n" "$help"
+        [ -z "$1" ] \
+            && exit 1
+        exit 0
+        ;;
+    --clipboard)
+        [ "$(command -v "xsel")" ] \
+            && uri="$(xsel -n -o -b)"
+        ;;
+    *)
+        uri="$1"
+        ;;
+esac
 
-uri="$1"
-uri_lower="$(printf "%s" "$1" | tr '[:upper:]' '[:lower:]')"
+uri_lower="$(printf "%s" "$uri" | tr '[:upper:]' '[:lower:]')"
 
 # open with/-out tmp file or readable
 open() {
     open_tmp() {
         tmp_file=$(mktemp -t link_handler.XXXXXX --suffix=".$1")
             $2 "$3" > "$tmp_file" \
-            && $4 "$tmp_file" \
-            && rm -rf "$tmp_file"
+                && $4 "$tmp_file" \
+                && rm -rf "$tmp_file"
     }
 
     case "$1" in
@@ -76,9 +88,6 @@ open() {
 }
 
 case "$uri_lower" in
-    -h | --help)
-        printf "%s\n" "$help"
-        ;;
     --readable)
         [ -n "$2" ] \
             && notify-send \
