@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2021-11-07T12:45:12+0100
+# date:   2021-11-07T18:35:16+0100
 
 # config
 web="$BROWSER"
@@ -12,7 +12,7 @@ podcast="tsp $TERMINAL -e mpv --no-audio-display"
 video="tsp mpv --really-quiet"
 picture="sxiv -q -a -s w"
 document="$READER"
-download="$TERMINAL -e terminal_wrapper.sh aria2c"
+download="$TERMINAL -e aria2c.sh"
 
 tmp_download="wget -qO -"
 tmp_readable="python -W ignore -m readability.readability -u"
