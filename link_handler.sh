@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2022-03-31T18:56:53+0200
+# date:   2022-04-15T07:48:40+0200
 
 # config
 web="$BROWSER"
@@ -14,7 +14,7 @@ picture="nsxiv -q -a -s w"
 document="$READER"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
 
-tmp_download="wget -qO -"
+tmp_download="curl -fsS "
 tmp_readable="python -W ignore -m readability.readability -u"
 
 # help
