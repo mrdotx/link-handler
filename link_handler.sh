@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2022-04-15T07:48:40+0200
+# date:   2022-04-26T12:46:41+0200
 
 # config
 web="$BROWSER"
@@ -31,7 +31,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
 
   Examples:
     $script suckless.org
-    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor1.jpg
+    $script https://raw.githubusercontent.com/mrdotx/dotfiles/master/screenshot_monitor1.png
     $script --clipboard
     $script --readable suckless.org
 
