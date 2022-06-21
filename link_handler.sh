@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2022-04-26T12:46:41+0200
+# date:   2022-06-21T20:30:18+0200
 
 # config
 web="$BROWSER"
@@ -91,6 +91,7 @@ case "$uri_lower" in
     --readable)
         [ -n "$2" ] \
             && notify-send \
+                -u normal \
                 "link handler - open link readable" \
                 "$2"
             open "$uri_lower" "$2"
@@ -102,6 +103,7 @@ case "$uri_lower" in
         | *'youtube.com/playlist'* \
         | *'youtu.be'*)
             notify-send \
+                -u normal \
                 "link handler - add video to taskspooler" \
                 "$uri"
             open "$video"
@@ -111,6 +113,7 @@ case "$uri_lower" in
         | *.flac \
         | *.opus)
             notify-send \
+                -u normal \
                 "link handler - add audio to taskspooler" \
                 "$uri"
             open "$podcast"
@@ -122,6 +125,7 @@ case "$uri_lower" in
         | *.gif \
         | *.webp)
             notify-send \
+                -u normal \
                 "link handler - open picture" \
                 "$uri"
             open --tmp "$picture" &
@@ -133,6 +137,7 @@ case "$uri_lower" in
         | *.cbr \
         | *.cbz)
             notify-send \
+                -u normal \
                 "link handler - open document" \
                 "$uri"
             open --tmp "$document" &
@@ -154,6 +159,7 @@ case "$uri_lower" in
         | *.7z \
         | *.rar)
             notify-send \
+                -u normal \
                 "link handler - download file" \
                 "$uri"
             open "$download"
@@ -161,11 +167,13 @@ case "$uri_lower" in
     *)
         if [ -f "$uri" ]; then
             notify-send \
+                -u normal \
                 "link handler - edit file" \
                 "$uri"
             open "$edit"
         else
             notify-send \
+                -u normal \
                 "link handler - open link" \
                 "$uri"
             open "$web"
