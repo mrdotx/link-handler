@@ -3,13 +3,14 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2023-04-12T10:33:24+0200
+# date:   2024-01-12T18:38:32+0100
 
 # config
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
-podcast="tsp $TERMINAL -e mpv --no-audio-display"
-video="tsp mpv --really-quiet"
+podcast="tsp $TERMINAL -e mpv"
+video="tsp mpv --no-terminal"
+iptv="mpv --no-terminal --force-window"
 picture="nsxiv -q -a -s w"
 document="$READER"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
@@ -40,6 +41,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
     edit          = $edit
     podcast       = $podcast
     video         = $video
+    iptv          = $iptv
     picture       = $picture
     document      = $document
     download      = $download
@@ -65,6 +67,14 @@ esac
 
 uri_lower="$(printf "%s" "$uri" | tr '[:upper:]' '[:lower:]')"
 
+# notifications
+notify() {
+    notify-send \
+        -u low \
+        "link handler - $1" \
+        "$2"
+}
+
 # open with/-out tmp file or readable
 open() {
     open_tmp() {
@@ -86,37 +96,32 @@ open() {
             ;;
     esac
 }
-
+# main
 case "$uri_lower" in
     --readable)
         [ -n "$2" ] \
-            && notify-send \
-                -u low \
-                "link handler - open link readable" \
-                "$2"
+            && notify "open link readable" "$2"
             open "$uri_lower" "$2"
         ;;
-    *.mkv \
-        | *.mp4 \
-        | *.webm \
-        | *'youtube.com/watch'* \
-        | *'youtube.com/playlist'* \
-        | *'youtu.be'*)
-            notify-send \
-                -u low \
-                "link handler - add video to taskspooler" \
-                "$uri"
-            open "$video"
-            ;;
     *.mp3 \
         | *.ogg \
         | *.flac \
         | *.opus)
-            notify-send \
-                -u low \
-                "link handler - add audio to taskspooler" \
-                "$uri"
+            notify "add audio to taskspooler" "$uri"
             open "$podcast"
+            ;;
+    *.mkv \
+        | *.mp4 \
+        | *.webm \
+        | *youtube.com/watch* \
+        | *youtube.com/playlist* \
+        | *youtu.be*)
+            notify "add video to taskspooler" "$uri"
+            open "$video"
+            ;;
+    rtsp://*)
+            notify "open stream" "$uri"
+            open "$iptv"
             ;;
     *.jpg \
         | *.jpe \
@@ -124,9 +129,7 @@ case "$uri_lower" in
         | *.png \
         | *.gif \
         | *.webp)
-            notify-send \
-                -u low \
-                "link handler - open picture" \
+            notify "open picture" \
                 "$uri"
             open --tmp "$picture" &
             ;;
@@ -136,10 +139,7 @@ case "$uri_lower" in
         | *.epub \
         | *.cbr \
         | *.cbz)
-            notify-send \
-                -u low \
-                "link handler - open document" \
-                "$uri"
+            notify "open document" "$uri"
             open --tmp "$document" &
             ;;
     *.torrent \
@@ -158,24 +158,15 @@ case "$uri_lower" in
         | *.zip \
         | *.7z \
         | *.rar)
-            notify-send \
-                -u low \
-                "link handler - download file" \
-                "$uri"
+            notify "download file" "$uri"
             open "$download"
             ;;
     *)
         if [ -f "$uri" ]; then
-            notify-send \
-                -u low \
-                "link handler - edit file" \
-                "$uri"
+            notify "edit file" "$uri"
             open "$edit"
         else
-            notify-send \
-                -u low \
-                "link handler - open link" \
-                "$uri"
+            notify "open link" "$uri"
             open "$web"
         fi
         ;;
