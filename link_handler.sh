@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2024-05-06T08:12:56+0200
+# date:   2024-07-03T08:54:39+0200
 
 # config
 web="$BROWSER"
@@ -22,7 +22,7 @@ tmp_readable="python -W ignore -m readability.readability -u"
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
-    $script [--clipboard] [--readable] [uri]
+    $script [--clipboard/--readable] [uri]
 
   Settings:
     [--clipboard] = open uri from clipboard
