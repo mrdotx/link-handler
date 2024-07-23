@@ -3,14 +3,14 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2024-07-03T08:54:39+0200
+# date:   2024-07-22T06:51:03+0200
 
 # config
 web="$BROWSER"
 edit="$TERMINAL -e $EDITOR"
 podcast="tsp $TERMINAL -e mpv"
-video="tsp mpv --no-terminal"
-iptv="mpv --no-terminal --force-window"
+video="tsp mpv --terminal=no"
+iptv="mpv --terminal=no --script-opts=menu_playlist=1 --force-window"
 picture="nsxiv -q -a -s w"
 document="zathura"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
@@ -96,6 +96,7 @@ open() {
             ;;
     esac
 }
+
 # main
 case "$uri_lower" in
     --readable)
@@ -110,18 +111,20 @@ case "$uri_lower" in
             notify "add audio to taskspooler" "$uri"
             open "$podcast"
             ;;
+    *.m3u \
+        | *.m3u8)
+            notify "open stream" "$uri"
+            open "$iptv"
+            ;;
     *.mkv \
         | *.mp4 \
         | *.webm \
+        | rtsp://* \
         | *youtube.com/watch* \
         | *youtube.com/playlist* \
         | *youtu.be*)
             notify "add video to taskspooler" "$uri"
             open "$video"
-            ;;
-    rtsp://*)
-            notify "open stream" "$uri"
-            open "$iptv"
             ;;
     *.jpg \
         | *.jpe \
@@ -129,8 +132,7 @@ case "$uri_lower" in
         | *.png \
         | *.gif \
         | *.webp)
-            notify "open picture" \
-                "$uri"
+            notify "open picture" "$uri"
             open --tmp "$picture" &
             ;;
     *.pdf \
