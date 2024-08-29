@@ -3,10 +3,10 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2024-08-29T05:55:19+0200
+# date:   2024-08-29T12:16:09+0200
 
 # config
-web="$BROWSER"
+web="w3m.sh"
 edit="$TERMINAL -e $EDITOR"
 podcast="tsp $TERMINAL -e mpv"
 video="tsp mpv --terminal=no"
