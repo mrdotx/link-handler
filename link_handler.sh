@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # github: https://github.com/mrdotx/link-handler
-# date:   2024-07-22T06:51:03+0200
+# date:   2024-08-29T05:55:19+0200
 
 # config
 web="$BROWSER"
@@ -11,7 +11,7 @@ edit="$TERMINAL -e $EDITOR"
 podcast="tsp $TERMINAL -e mpv"
 video="tsp mpv --terminal=no"
 iptv="mpv --terminal=no --script-opts=menu_playlist=1 --force-window"
-picture="nsxiv -q -a -s w"
+picture="nsxiv --quiet --animate --scale-mode w"
 document="zathura"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
 
