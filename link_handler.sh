@@ -2,8 +2,8 @@
 
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
-# github: https://github.com/mrdotx/link-handler
-# date:   2024-08-29T12:16:09+0200
+# url:    https://github.com/mrdotx/link-handler
+# date:   2025-08-09T06:04:51+0200
 
 # config
 web="w3m.sh"
