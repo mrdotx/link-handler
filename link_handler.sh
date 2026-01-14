@@ -3,7 +3,7 @@
 # path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # url:    https://github.com/mrdotx/link-handler
-# date:   2025-08-09T06:04:51+0200
+# date:   2026-01-14T06:32:22+0100
 
 # config
 web="w3m.sh"
@@ -15,8 +15,8 @@ picture="nsxiv --quiet --animate --scale-mode w"
 document="zathura"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
 
-tmp_download="curl -fsS "
-tmp_readable="python -W ignore -m readability.readability -u"
+tmp_download="curl -fsS"
+tmp_readable="readable"
 
 # help
 script=$(basename "$0")
@@ -26,7 +26,7 @@ help="$script [-h/--help] -- script to open links on basis of extensions
 
   Settings:
     [--clipboard] = open uri from clipboard
-    [--readable]  = make the html content readable with python readability-lxml
+    [--readable]  = make the html content readable with nodejs-readability-cli
                     (Mozilla's Readability library)
     [uri]         = uniform resource identifier
 
