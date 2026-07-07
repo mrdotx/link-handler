@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# path:   /home/klassiker/.local/share/repos/link-handler/link_handler.sh
+# path:   /home/klassiker/Projects/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # url:    https://github.com/mrdotx/link-handler
-# date:   2026-01-14T06:32:22+0100
+# date:   2026-07-07T04:41:30+0200
 
 # config
 web="w3m.sh"
@@ -12,7 +12,7 @@ podcast="tsp $TERMINAL -e mpv"
 video="tsp mpv --terminal=no"
 iptv="mpv --terminal=no --script-opts=menu_playlist=1 --force-window"
 picture="nsxiv --quiet --animate --scale-mode w"
-document="zathura"
+document="mupdf"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
 
 tmp_download="curl -fsS"
@@ -22,7 +22,7 @@ tmp_readable="readable"
 script=$(basename "$0")
 help="$script [-h/--help] -- script to open links on basis of extensions
   Usage:
-    $script [--clipboard/--readable] [uri]
+    $script [--clipboard|--readable] [uri]
 
   Settings:
     [--clipboard] = open uri from clipboard
