@@ -3,7 +3,7 @@
 # path:   /home/klassiker/Projects/repos/link-handler/link_handler.sh
 # author: klassiker [mrdotx]
 # url:    https://github.com/mrdotx/link-handler
-# date:   2026-07-07T04:41:30+0200
+# date:   2026-08-14T02:22:48+0200
 
 # config
 web="w3m.sh"
@@ -12,7 +12,7 @@ podcast="tsp $TERMINAL -e mpv"
 video="tsp mpv --terminal=no"
 iptv="mpv --terminal=no --script-opts=menu_playlist=1 --force-window"
 picture="nsxiv --quiet --animate --scale-mode w"
-document="mupdf"
+document="mupdf.sh"
 download="$TERMINAL -e terminal_wrapper.sh aria2c.sh"
 
 tmp_download="curl -fsS"
